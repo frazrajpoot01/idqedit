@@ -176,7 +176,7 @@ function ProductsContent() {
                     onClick={() => updateParams('category', cat)}
                     className={`px-3 py-2.5 rounded-[var(--radius-md)] text-[13px] font-semibold text-left transition-colors border ${
                       categoryParam === cat 
-                        ? 'bg-[#1a3b5c] text-white border-[#1a3b5c]' // Using a dark blue similar to screenshot for active
+                        ? 'bg-[var(--color-primary)] text-white border-[var(--color-primary)]'
                         : 'bg-[var(--color-canvas)] text-[var(--color-ink)] border-[var(--color-hairline)] hover:border-gray-400'
                     }`}
                   >

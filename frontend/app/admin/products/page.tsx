@@ -7,6 +7,8 @@ import { ProductType } from '@/components/PinCard';
 
 export default function AdminProducts() {
   const [products, setProducts] = useState<ProductType[]>([]);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -24,9 +26,8 @@ export default function AdminProducts() {
       .catch(console.error);
   }, [router]);
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this product?')) return;
-    
+  const executeDelete = async (id: string) => {
+    setIsDeleting(true);
     try {
       const res = await fetch(`/api/products/${id}`, {
         method: 'DELETE',
@@ -39,6 +40,9 @@ export default function AdminProducts() {
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsDeleting(false);
+      setDeletingId(null);
     }
   };
 
@@ -106,7 +110,7 @@ export default function AdminProducts() {
                         <Edit2 className="w-4 h-4" />
                       </Link>
                       <button 
-                        onClick={() => handleDelete(product._id)}
+                        onClick={() => setDeletingId(product._id!)}
                         className="p-2 text-red-500 hover:bg-red-50 rounded-full transition-colors"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -158,7 +162,7 @@ export default function AdminProducts() {
                   <Edit2 className="w-4 h-4" /> Edit
                 </Link>
                 <button 
-                  onClick={() => handleDelete(product._id)}
+                  onClick={() => setDeletingId(product._id!)}
                   className="px-4 py-2 text-sm font-semibold text-red-600 bg-red-50 hover:bg-red-100 rounded-full transition-colors flex items-center gap-2"
                 >
                   <Trash2 className="w-4 h-4" /> Delete
@@ -169,6 +173,37 @@ export default function AdminProducts() {
           ))
         )}
       </div>
+
+      {/* Custom Delete Confirmation Modal */}
+      {deletingId && (
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-[var(--color-canvas)] rounded-[var(--radius-lg)] shadow-2xl p-6 md:p-8 max-w-sm w-full border border-[var(--color-hairline)] transform transition-all">
+            <div className="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center mb-4">
+              <Trash2 className="w-6 h-6 text-red-600" />
+            </div>
+            <h2 className="text-xl font-bold text-[var(--color-ink)] mb-2">Delete Product</h2>
+            <p className="text-[var(--color-mute)] mb-8 text-sm">
+              Are you sure you want to delete this product? This action cannot be undone.
+            </p>
+            <div className="flex justify-end gap-3">
+              <button 
+                onClick={() => setDeletingId(null)}
+                disabled={isDeleting}
+                className="px-5 py-2.5 font-bold text-[var(--color-ink)] hover:bg-[var(--color-surface-soft)] rounded-[var(--radius-full)] transition-colors"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={() => executeDelete(deletingId)}
+                disabled={isDeleting}
+                className="px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-[var(--radius-full)] transition-colors disabled:opacity-50 flex items-center gap-2"
+              >
+                {isDeleting ? 'Deleting...' : 'Delete Product'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -18,6 +18,7 @@ export default function NewProduct() {
     isFeatured: false
   });
   const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleImageChange = (index: number, value: string) => {
     const newImages = [...formData.images];
@@ -36,6 +37,8 @@ export default function NewProduct() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    setError('');
     try {
       const payload = {
         ...formData,
@@ -58,9 +61,11 @@ export default function NewProduct() {
       } else {
         const data = await res.json();
         setError(data.error || 'Failed to create product');
+        setIsSubmitting(false);
       }
     } catch (err) {
-      setError('Server error');
+      setError('Server error - Check MongoDB connection');
+      setIsSubmitting(false);
     }
   };
 
@@ -236,8 +241,8 @@ export default function NewProduct() {
           <button type="button" onClick={() => router.back()} className="px-6 py-3 font-bold text-[var(--color-ink)] hover:bg-[var(--color-surface-soft)] rounded-[var(--radius-full)] transition-colors">
             Cancel
           </button>
-          <button type="submit" className="px-6 py-3 bg-[var(--color-primary)] hover:bg-[var(--color-primary-pressed)] text-white font-bold rounded-[var(--radius-full)] transition-colors">
-            Save Product
+          <button disabled={isSubmitting} type="submit" className="px-6 py-3 bg-[var(--color-primary)] hover:bg-[var(--color-primary-pressed)] text-white font-bold rounded-[var(--radius-full)] transition-colors disabled:opacity-50">
+            {isSubmitting ? 'Saving...' : 'Save Product'}
           </button>
         </div>
       </form>

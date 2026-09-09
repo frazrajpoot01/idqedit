@@ -8,6 +8,9 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
   const [products, setProducts] = useState<ProductType[]>([]);
@@ -24,26 +27,59 @@ export default function Home() {
     }
   };
 
-  const heroRef = useRef<HTMLDivElement>(null);
-  const imageRef = useRef<HTMLDivElement>(null);
-  const textRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLElement>(null);
 
   useGSAP(() => {
-    // Image animation
-    gsap.fromTo(imageRef.current,
-      { scale: 1.05, opacity: 0 },
-      { scale: 1, opacity: 1, duration: 1.2, ease: "power3.out" }
-    );
+    // 2. Hero Section (On Load)
+    gsap.from('.hero-element', {
+      y: 40,
+      opacity: 0,
+      duration: 1,
+      ease: "power3.out",
+      stagger: 0.15
+    });
 
-    // Staggered text elements animation
-    if (textRef.current) {
-      const textElements = textRef.current.children;
-      gsap.fromTo(textElements,
-        { y: 20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, stagger: 0.15, ease: "power2.out", delay: 0.2 }
-      );
-    }
-  }, { scope: heroRef });
+    // 3. Content Sections ("DAILY DISCOVERIES" & "HOME & LIFESTYLE")
+    gsap.utils.toArray('.scroll-section').forEach((section: any) => {
+      gsap.from(section.children, {
+        scrollTrigger: {
+          trigger: section,
+          start: "top 85%",
+        },
+        y: 40,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.2,
+        ease: "power2.out"
+      });
+    });
+
+    // 4. Trending Products Grid
+    gsap.from('.product-grid-container > div > *', {
+      scrollTrigger: {
+        trigger: '.product-grid-container',
+        start: "top 80%",
+      },
+      y: 50,
+      opacity: 0,
+      duration: 0.8,
+      stagger: 0.15,
+      ease: "back.out(1.2)"
+    });
+
+    // 5. Newsletter Section
+    gsap.from('.newsletter-section', {
+      scrollTrigger: {
+        trigger: '.newsletter-section',
+        start: "top 80%",
+      },
+      scale: 0.95,
+      opacity: 0,
+      y: 30,
+      duration: 1,
+      ease: "power3.out"
+    });
+  }, { scope: containerRef });
 
   useEffect(() => {
     fetch('/api/products')
@@ -62,15 +98,15 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-[var(--color-surface-soft)] flex flex-col">
+    <main ref={containerRef} className="min-h-screen bg-[var(--color-surface-soft)] flex flex-col">
       <NavBar />
 
       {/* 1. Hero Section (Text) */}
       <section className="flex flex-col items-center text-center pt-24 pb-16 md:pt-32 md:pb-24 px-4">
-        <h1 className="text-[44px] md:text-[70px] font-bold leading-[1.1] tracking-[-1.2px] text-black max-w-4xl mx-auto font-[family-name:var(--font-playfair)]">
+        <h1 className="hero-element text-[44px] md:text-[70px] font-bold leading-[1.1] tracking-[-1.2px] text-black max-w-4xl mx-auto font-[family-name:var(--font-playfair)]">
           Curated deals for your <span className="text-[#e60023]">aesthetic life.</span>
         </h1>
-        <p className="text-lg md:text-xl text-gray-600 mt-6 max-w-2xl mx-auto font-normal">
+        <p className="hero-element text-lg md:text-xl text-gray-600 mt-6 max-w-2xl mx-auto font-normal">
           Discover the best finds from Temu, handpicked and reviewed.
         </p>
       </section>
@@ -84,7 +120,7 @@ export default function Home() {
             { name: "Kitchen", img: "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&q=80&w=800", link: "/products?category=Food" },
             { name: "Lifestyle", img: "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&q=80&w=800", link: "/products?category=Lifestyle" },
           ].map((cat) => (
-            <Link key={cat.name} href={cat.link} className="relative w-full aspect-[4/5] rounded-[16px] overflow-hidden group cursor-pointer shadow-sm block">
+            <Link key={cat.name} href={cat.link} className="hero-element relative w-full aspect-[4/5] rounded-[16px] overflow-hidden group cursor-pointer shadow-sm block">
               <Image
                 src={cat.img}
                 alt={cat.name}
@@ -105,11 +141,11 @@ export default function Home() {
       {/* 3. Feature Block 1 Wrapper (Pure White) */}
       <section className="w-full bg-[#ffffff] py-16 border-t border-[var(--color-hairline)]">
         {/* GSAP Animated Hero Feature Block */}
-        <div ref={heroRef} className="px-4 md:px-12 max-w-7xl mx-auto">
+        <div className="px-4 md:px-12 max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
 
             {/* Left Column (Media) */}
-            <div ref={imageRef} className="relative w-full aspect-[4/3] md:aspect-square rounded-[16px] overflow-hidden bg-gray-100 shadow-sm">
+            <div className="relative w-full aspect-[4/3] md:aspect-square rounded-[16px] overflow-hidden bg-gray-100 shadow-sm">
               <Image
                 src="https://images.unsplash.com/photo-1593640408182-31c70c8268f5?auto=format&fit=crop&q=80&w=1200"
                 alt="Workspace Desk Setup"
@@ -120,7 +156,7 @@ export default function Home() {
             </div>
 
             {/* Right Column (Editorial Text) */}
-            <div ref={textRef} className="flex flex-col justify-center">
+            <div className="scroll-section flex flex-col justify-center">
               <span className="text-xs font-semibold tracking-wider text-gray-500 uppercase mb-4 block">
                 DAILY DISCOVERIES
               </span>
@@ -138,7 +174,7 @@ export default function Home() {
 
       {/* 4. Product Showcase (Soft Off-White) */}
       <section className="w-full bg-[#fbfbf9] py-16 border-t border-[var(--color-hairline)]">
-        <div className="px-4 md:px-12 max-w-7xl mx-auto">
+        <div className="product-grid-container px-4 md:px-12 max-w-7xl mx-auto">
           <div className="flex justify-between items-end mb-8 px-2">
             <h2 className="text-[28px] md:text-[32px] font-bold tracking-tight text-black">Trending This Week</h2>
             <Link href="/products" className="text-sm font-bold text-[#e60023] hover:underline flex items-center gap-1">
@@ -153,7 +189,7 @@ export default function Home() {
       <section className="w-full bg-[#f6f6f3] py-16 border-t border-b border-[var(--color-hairline)]">
         {/* Editorial Blog Block 2 (Asymmetric Right) */}
         <div className="max-w-7xl mx-auto px-4 md:px-12 flex flex-col-reverse md:flex-row items-center gap-8 md:gap-16">
-          <div className="md:w-1/2 w-full flex flex-col justify-center">
+          <div className="scroll-section md:w-1/2 w-full flex flex-col justify-center">
             <span className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-4 block">HOME & LIFESTYLE</span>
             <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-black mb-6 leading-tight font-[family-name:var(--font-playfair)]">
               Quality Finds for Every Room
@@ -178,7 +214,7 @@ export default function Home() {
 
 
       {/* 7. High-Contrast Dark CTA Strip */}
-      <section className="w-full bg-[#262622] text-white py-24 px-4 flex flex-col items-center text-center mt-auto">
+      <section className="newsletter-section w-full bg-[#262622] text-white py-24 px-4 flex flex-col items-center text-center mt-auto">
         <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4 text-white font-[family-name:var(--font-playfair)]">
           Never miss a trending deal.
         </h2>

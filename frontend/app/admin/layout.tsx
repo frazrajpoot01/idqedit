@@ -6,10 +6,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     <div className="min-h-screen bg-[var(--color-surface-soft)] flex flex-col">
       <nav className="h-[64px] bg-[var(--color-canvas)] border-b border-[var(--color-hairline)] px-4 md:px-6 flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Link href="/admin/products" className="font-bold text-[var(--color-ink)] text-xl">
+          <Link href="/admin/products" className="font-bold text-[var(--color-ink)] text-lg sm:text-xl">
             Admin Panel
           </Link>
-          <Link href="/" className="text-[var(--color-mute)] hover:text-[var(--color-ink)] text-sm hidden sm:block">
+          <Link href="/" className="text-[var(--color-mute)] hover:text-[var(--color-ink)] text-xs sm:text-sm">
             View Live Site
           </Link>
         </div>

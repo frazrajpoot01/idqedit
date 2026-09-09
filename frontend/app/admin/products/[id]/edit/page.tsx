@@ -20,6 +20,7 @@ export default function EditProduct({ params }: { params: Promise<{ id: string }
     isFeatured: false
   });
   const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -63,6 +64,8 @@ export default function EditProduct({ params }: { params: Promise<{ id: string }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    setError('');
     try {
       const payload = {
         ...formData,
@@ -85,9 +88,11 @@ export default function EditProduct({ params }: { params: Promise<{ id: string }
       } else {
         const data = await res.json();
         setError(data.error || 'Failed to update product');
+        setIsSubmitting(false);
       }
     } catch (err) {
-      setError('Server error');
+      setError('Server error - Check MongoDB connection');
+      setIsSubmitting(false);
     }
   };
 
@@ -265,8 +270,8 @@ export default function EditProduct({ params }: { params: Promise<{ id: string }
           <button type="button" onClick={() => router.back()} className="px-6 py-3 font-bold text-[var(--color-ink)] hover:bg-[var(--color-surface-soft)] rounded-[var(--radius-full)] transition-colors">
             Cancel
           </button>
-          <button type="submit" className="px-6 py-3 bg-[var(--color-primary)] hover:bg-[var(--color-primary-pressed)] text-white font-bold rounded-[var(--radius-full)] transition-colors">
-            Update Product
+          <button disabled={isSubmitting} type="submit" className="px-6 py-3 bg-[var(--color-primary)] hover:bg-[var(--color-primary-pressed)] text-white font-bold rounded-[var(--radius-full)] transition-colors disabled:opacity-50">
+            {isSubmitting ? 'Saving...' : 'Update Product'}
           </button>
         </div>
       </form>
