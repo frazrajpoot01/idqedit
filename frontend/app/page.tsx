@@ -175,9 +175,9 @@ export default function Home() {
       {/* 4. Product Showcase (Soft Off-White) */}
       <section className="w-full bg-[#fbfbf9] py-16 border-t border-[var(--color-hairline)]">
         <div className="product-grid-container px-4 md:px-12 max-w-7xl mx-auto">
-          <div className="flex justify-between items-end mb-8 px-2">
-            <h2 className="text-[28px] md:text-[32px] font-bold tracking-tight text-black">Trending This Week</h2>
-            <Link href="/products" className="text-sm font-bold text-[#e60023] hover:underline flex items-center gap-1">
+          <div className="flex flex-row justify-between items-end mb-8 px-2 gap-4">
+            <h2 className="text-2xl sm:text-[28px] md:text-[32px] font-bold tracking-tight text-black leading-tight">Trending This Week</h2>
+            <Link href="/products" className="shrink-0 text-sm font-bold text-[#e60023] hover:underline flex items-center gap-1 mb-1 md:mb-2">
               Shop All <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
