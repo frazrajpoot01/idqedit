@@ -195,7 +195,7 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
               </div>
               
               {/* Product Title */}
-              <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-gray-900 leading-tight font-serif">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-gray-900 leading-tight font-serif">
                 {product.title}
               </h1>
               
