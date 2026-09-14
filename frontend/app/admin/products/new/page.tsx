@@ -1,10 +1,18 @@
 "use client";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Plus, Trash2 } from 'lucide-react';
 
 export default function NewProduct() {
   const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem('admin_token');
+    if (!token || token === 'null' || token === 'undefined') {
+      router.push('/admin/login');
+    }
+  }, [router]);
+
   const [formData, setFormData] = useState({
     title: '',
     slug: '',
@@ -60,6 +68,11 @@ export default function NewProduct() {
       if (res.ok) {
         router.push('/admin/products');
       } else {
+        if (res.status === 401) {
+          localStorage.removeItem('admin_token');
+          router.push('/admin/login');
+          return;
+        }
         const data = await res.json();
         setError(data.error || 'Failed to create product');
         setIsSubmitting(false);

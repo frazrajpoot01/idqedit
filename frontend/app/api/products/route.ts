@@ -41,7 +41,7 @@ export async function POST(request: Request) {
   } catch (error: any) {
     console.error('Error creating product:', error);
     
-    if (error.message === 'No authorization header' || error.message === 'Token missing' || error.message === 'Invalid token') {
+    if (error.message === 'No authorization header' || error.message === 'Token missing' || error.message.startsWith('Invalid token')) {
         return NextResponse.json({ error: error.message }, { status: 401 });
     }
 

@@ -68,7 +68,7 @@ export async function PUT(
 
     return NextResponse.json(product, { status: 200 });
   } catch (error: any) {
-    if (error.message === 'No authorization header' || error.message === 'Token missing' || error.message === 'Invalid token') {
+    if (error.message === 'No authorization header' || error.message === 'Token missing' || error.message.startsWith('Invalid token')) {
         return NextResponse.json({ error: error.message }, { status: 401 });
     }
 
@@ -121,7 +121,7 @@ export async function DELETE(
 
     return NextResponse.json({ message: 'Product deleted' }, { status: 200 });
   } catch (error: any) {
-    if (error.message === 'No authorization header' || error.message === 'Token missing' || error.message === 'Invalid token') {
+    if (error.message === 'No authorization header' || error.message === 'Token missing' || error.message.startsWith('Invalid token')) {
         return NextResponse.json({ error: error.message }, { status: 401 });
     }
     return NextResponse.json(

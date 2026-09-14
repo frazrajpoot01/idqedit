@@ -6,15 +6,15 @@ export function verifyAuth(request: Request): any {
     throw new Error('No authorization header');
   }
 
-  const token = authHeader.split(' ')[1];
-  if (!token) {
+  const token = authHeader.split(' ')[1]?.trim();
+  if (!token || token === 'null' || token === 'undefined') {
     throw new Error('Token missing');
   }
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'supersecretjwtkey');
     return decoded;
-  } catch (error) {
-    throw new Error('Invalid token');
+  } catch (error: any) {
+    throw new Error(`Invalid token: ${error.message}`);
   }
 }

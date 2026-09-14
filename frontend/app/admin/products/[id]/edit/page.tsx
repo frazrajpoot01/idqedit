@@ -24,6 +24,12 @@ export default function EditProduct({ params }: { params: Promise<{ id: string }
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const token = localStorage.getItem('admin_token');
+    if (!token || token === 'null' || token === 'undefined') {
+      router.push('/admin/login');
+      return;
+    }
+
     fetch(`/api/products/${resolvedParams.id}`)
       .then(res => res.json())
       .then(data => {
@@ -86,6 +92,11 @@ export default function EditProduct({ params }: { params: Promise<{ id: string }
       if (res.ok) {
         router.push('/admin/products');
       } else {
+        if (res.status === 401) {
+          localStorage.removeItem('admin_token');
+          router.push('/admin/login');
+          return;
+        }
         const data = await res.json();
         setError(data.error || 'Failed to update product');
         setIsSubmitting(false);

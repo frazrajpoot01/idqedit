@@ -13,7 +13,7 @@ export default function AdminProducts() {
 
   useEffect(() => {
     const token = localStorage.getItem('admin_token');
-    if (!token) {
+    if (!token || token === 'null' || token === 'undefined') {
       router.push('/admin/login');
       return;
     }
@@ -37,6 +37,9 @@ export default function AdminProducts() {
       });
       if (res.ok) {
         setProducts(products.filter(p => p._id !== id));
+      } else if (res.status === 401) {
+        localStorage.removeItem('admin_token');
+        router.push('/admin/login');
       }
     } catch (error) {
       console.error(error);
