@@ -218,7 +218,7 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
                 rel="noopener noreferrer"
                 className="flex items-center justify-center w-full rounded-full bg-rose-600 hover:bg-rose-700 text-white py-4 font-bold text-lg transition-all duration-200 shadow-md hover:shadow-lg"
               >
-                Buy on Temu
+                Buy Now
               </a>
 
               {/* Trust Badges */}

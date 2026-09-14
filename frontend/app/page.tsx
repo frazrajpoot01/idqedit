@@ -107,7 +107,7 @@ export default function Home() {
           Curated deals for your <span className="text-[#e60023]">aesthetic life.</span>
         </h1>
         <p className="hero-element text-lg md:text-xl text-gray-600 mt-6 max-w-2xl mx-auto font-normal">
-          Discover the best finds from Temu, handpicked and reviewed.
+          Discover the best trending finds, handpicked and reviewed.
         </p>
       </section>
 
