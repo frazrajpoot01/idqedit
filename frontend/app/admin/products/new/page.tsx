@@ -42,6 +42,7 @@ export default function NewProduct() {
     try {
       const payload = {
         ...formData,
+        slug: formData.slug.trim(),
         price: parseFloat(formData.price),
         originalPrice: formData.originalPrice ? parseFloat(formData.originalPrice) : undefined,
         images: formData.images.map(s => s.trim()).filter(Boolean)

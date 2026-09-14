@@ -71,6 +71,21 @@ export async function PUT(
     if (error.message === 'No authorization header' || error.message === 'Token missing' || error.message === 'Invalid token') {
         return NextResponse.json({ error: error.message }, { status: 401 });
     }
+
+    if (error.name === 'ValidationError') {
+      return NextResponse.json(
+        { error: 'Validation Error', details: error.message },
+        { status: 400 }
+      );
+    }
+    
+    if (error.code === 11000) {
+      return NextResponse.json(
+        { error: 'A product with this URL Path (slug) already exists.' },
+        { status: 409 }
+      );
+    }
+
     return NextResponse.json(
       { error: 'Failed to update product', details: error.message },
       { status: 500 }

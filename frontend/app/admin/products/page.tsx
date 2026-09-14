@@ -176,29 +176,43 @@ export default function AdminProducts() {
 
       {/* Custom Delete Confirmation Modal */}
       {deletingId && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-[var(--color-canvas)] rounded-[var(--radius-lg)] shadow-2xl p-6 md:p-8 max-w-sm w-full border border-[var(--color-hairline)] transform transition-all">
-            <div className="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center mb-4">
-              <Trash2 className="w-6 h-6 text-red-600" />
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 overflow-hidden" aria-modal="true" role="dialog">
+          <div className="bg-white rounded-[24px] shadow-2xl p-6 md:p-8 max-w-[400px] w-full border border-gray-100 relative text-center">
+            
+            {/* Close button (X) */}
+            <button 
+              onClick={() => setDeletingId(null)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-800 bg-gray-50 hover:bg-gray-100 rounded-full w-8 h-8 flex items-center justify-center transition-colors"
+            >
+              <span className="text-xl leading-none">&times;</span>
+            </button>
+
+            <div className="w-16 h-16 rounded-full bg-[#fef5f5] flex items-center justify-center mb-6 mx-auto">
+              <Trash2 className="w-8 h-8 text-[#e60023]" />
             </div>
-            <h2 className="text-xl font-bold text-[var(--color-ink)] mb-2">Delete Product</h2>
-            <p className="text-[var(--color-mute)] mb-8 text-sm">
-              Are you sure you want to delete this product? This action cannot be undone.
+            
+            <h2 className="text-2xl font-bold text-black mb-3 font-[family-name:var(--font-sans)]">
+              Delete Product
+            </h2>
+            
+            <p className="text-gray-500 mb-8 text-[15px] leading-relaxed px-2">
+              Are you sure you want to permanently delete this product? This action cannot be undone.
             </p>
-            <div className="flex justify-end gap-3">
+            
+            <div className="flex flex-col-reverse sm:flex-row justify-center gap-3 w-full">
               <button 
                 onClick={() => setDeletingId(null)}
                 disabled={isDeleting}
-                className="px-5 py-2.5 font-bold text-[var(--color-ink)] hover:bg-[var(--color-surface-soft)] rounded-[var(--radius-full)] transition-colors"
+                className="w-full sm:w-1/2 px-6 py-3.5 font-bold text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors"
               >
                 Cancel
               </button>
               <button 
                 onClick={() => executeDelete(deletingId)}
                 disabled={isDeleting}
-                className="px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-[var(--radius-full)] transition-colors disabled:opacity-50 flex items-center gap-2"
+                className="w-full sm:w-1/2 px-6 py-3.5 bg-[#e60023] hover:bg-[#cc001f] text-white font-bold rounded-full transition-colors disabled:opacity-50 flex items-center justify-center shadow-lg shadow-red-500/30"
               >
-                {isDeleting ? 'Deleting...' : 'Delete Product'}
+                {isDeleting ? 'Deleting...' : 'Delete'}
               </button>
             </div>
           </div>

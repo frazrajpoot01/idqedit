@@ -7,7 +7,7 @@ export interface IProduct extends Document {
   originalPrice?: number;
   affiliateUrl: string;
   couponCode?: string;
-  category?: 'Home Decor' | 'Electronics' | 'Fashion' | 'Kitchen' | 'Lifestyle';
+  category?: 'Clothing' | 'Lifestyle' | 'Home Decor' | 'Beauty' | 'Educational' | 'Food' | 'Fitness' | 'Self Care' | 'Tech' | 'Electronics' | 'Fashion' | 'Kitchen';
   images: string[];
   videoUrl?: string;
   description?: string;
@@ -44,7 +44,7 @@ const ProductSchema: Schema = new Schema(
     },
     category: {
       type: String,
-      enum: ['Home Decor', 'Electronics', 'Fashion', 'Kitchen', 'Lifestyle'],
+      enum: ['Clothing', 'Lifestyle', 'Home Decor', 'Beauty', 'Educational', 'Food', 'Fitness', 'Self Care', 'Tech', 'Electronics', 'Fashion', 'Kitchen'],
     },
     images: {
       type: [String],

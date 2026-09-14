@@ -34,7 +34,7 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
   };
 
   useEffect(() => {
-    fetch(`/api/products/slug/${resolvedParams.slug}`)
+    fetch(`/api/products/slug/${encodeURIComponent(decodeURIComponent(resolvedParams.slug))}`)
       .then(res => {
         if (!res.ok) throw new Error('Not found');
         return res.json();
@@ -126,6 +126,7 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
                     src={activeMedia.url}
                     alt={product.title}
                     fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
                     className="object-cover absolute inset-0"
                     priority
                   />
@@ -173,7 +174,7 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
                           </div>
                         </>
                       ) : (
-                        <Image src={media.url} alt={`Thumbnail ${idx}`} fill className="object-cover" />
+                        <Image src={media.url} alt={`Thumbnail ${idx}`} fill sizes="80px" className="object-cover" />
                       )}
                     </button>
                   ))}

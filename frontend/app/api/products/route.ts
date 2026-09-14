@@ -51,6 +51,13 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
+    if (error.code === 11000) {
+      return NextResponse.json(
+        { error: 'A product with this URL Path (slug) already exists.' },
+        { status: 409 }
+      );
+    }
+
     return NextResponse.json(
       { error: 'Failed to create product', details: error.message },
       { status: 500 }
